@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your_comapny_name — Prawn & Fish Farm Solutions</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --deep:    #020B18;
+  --ocean:   #0A2540;
+  --mid:     #0E3460;
+  --teal:    #00C9B1;
+  --foam:    #7FFFD4;
+  --amber:   #F5A623;
+  --red:     #E05050;
+  --white:   #F0FBFF;
+  --muted:   #7BA4BE;
+  --glass:   rgba(0,201,177,0.07);
+  --border:  rgba(0,201,177,0.18);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--deep);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--ocean); }
+::-webkit-scrollbar-thumb { background: var(--teal); border-radius: 10px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 32px;
+  background: rgba(2,11,24,0.88);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--white);
+  display: flex; align-items: center; gap: 8px;
+  letter-spacing: -.01em;
+}
+.nav-logo span { color: var(--teal); }
+.nav-right { display: flex; gap: 10px; align-items: center; }
+
+.btn-call {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  background: var(--amber); color: #1a0a00;
+  font-weight: 700; font-size: 0.8rem;
+  text-decoration: none; transition: transform .15s, box-shadow .15s;
+  white-space: nowrap;
+}
+.btn-call:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(245,166,35,.4); }
+.btn-wa {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 8px;
+  background: #25D366; color: #fff;
+  font-weight: 700; font-size: 0.8rem;
+  text-decoration: none; transition: transform .15s, box-shadow .15s;
+  white-space: nowrap;
+}
+.btn-wa:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,211,102,.4); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  overflow: hidden;
+  padding: 120px 24px 100px;
+  background: radial-gradient(ellipse at 50% 80%, #063356 0%, #020B18 70%);
+}
+
+/* Water shimmer overlay */
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 80px,
+    rgba(0,201,177,0.025) 80px,
+    rgba(0,201,177,0.025) 82px
+  );
+  animation: shimmer 8s linear infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(82px); }
+}
+
+#bubbleCanvas {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--teal); font-weight: 600; margin-bottom: 20px;
+  background: rgba(0,201,177,.1); border: 1px solid var(--border);
+  padding: 6px 16px; border-radius: 50px;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.4rem, 6.5vw, 5.2rem);
+  font-weight: 800; color: var(--white);
+  line-height: 1.05; max-width: 820px;
+  letter-spacing: -.02em;
+}
+.hero h1 .accent { color: var(--teal); }
+.hero h1 .accent2 { color: var(--foam); }
+
+.hero-sub {
+  margin-top: 22px; max-width: 540px; margin-left: auto; margin-right: auto;
+  color: var(--muted); font-size: 1.02rem; line-height: 1.7;
+}
+
+.hero-btns {
+  margin-top: 38px; display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
+.btn-primary {
+  padding: 14px 28px; border-radius: 10px;
+  background: var(--teal); color: var(--deep);
+  font-weight: 700; font-size: 0.95rem;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,201,177,.45); }
+.btn-ghost {
+  padding: 14px 28px; border-radius: 10px;
+  background: transparent; color: var(--white);
+  border: 1.5px solid rgba(255,255,255,.2);
+  font-weight: 600; font-size: 0.95rem;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  transition: all .15s;
+}
+.btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+/* hero stats */
+.hero-stats {
+  display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;
+  margin-top: 56px; position: relative; z-index: 2;
+}
+.stat-item { text-align: center; }
+.stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem; font-weight: 800; color: var(--teal);
+  line-height: 1;
+}
+.stat-label { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+/* ── TRUST STRIP ── */
+.trust-strip {
+  background: var(--ocean);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  display: flex; flex-wrap: wrap;
+  justify-content: center; gap: 36px;
+  padding: 20px 32px;
+}
+.trust-item {
+  display: flex; align-items: center; gap: 9px;
+  color: rgba(240,251,255,.75); font-size: 0.83rem; font-weight: 500;
+}
+.trust-item .ti { font-size: 1.2rem; }
+
+/* ── SECTION COMMONS ── */
+.section { padding: 90px 24px; }
+.section-eyebrow {
+  text-align: center;
+  font-size: 0.72rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--teal); font-weight: 600; margin-bottom: 10px;
+}
+.section-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.8rem); font-weight: 800;
+  color: var(--white); text-align: center;
+  letter-spacing: -.02em; line-height: 1.1;
+  margin-bottom: 12px;
+}
+.section-sub {
+  text-align: center; color: var(--muted); font-size: 0.95rem;
+  max-width: 500px; margin: 0 auto 52px; line-height: 1.65;
+}
+
+/* ── PRODUCTS ── */
+.products-section { background: var(--deep); }
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  gap: 22px; max-width: 1100px; margin: 0 auto;
+}
+.product-card {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform .2s, box-shadow .2s, border-color .2s;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(0,201,177,.12);
+  border-color: rgba(0,201,177,.4);
+}
+.card-visual {
+  height: 140px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 5rem;
+  position: relative;
+  background: linear-gradient(135deg, rgba(10,37,64,1) 0%, rgba(6,51,86,1) 100%);
+  overflow: hidden;
+}
+.card-visual::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+  background: linear-gradient(transparent, rgba(2,11,24,0.6));
+}
+.card-badge {
+  position: absolute; top: 10px; right: 10px; z-index: 1;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 50px;
+}
+.badge-hot { background: var(--red); color: #fff; }
+.badge-new { background: var(--teal); color: var(--deep); }
+.badge-eco { background: #2ecc71; color: #fff; }
+.badge-deal { background: var(--amber); color: #1a0a00; }
+
+.card-body { padding: 18px 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 7px; }
+.card-tag {
+  font-size: 0.7rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--teal); font-weight: 600;
+}
+.card-body h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.05rem; font-weight: 700; color: var(--white);
+  line-height: 1.2;
+}
+.card-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.55; flex: 1; }
+.card-targets {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px;
+}
+.target-tag {
+  font-size: 0.68rem; padding: 2px 8px; border-radius: 4px;
+  background: rgba(0,201,177,.1); color: var(--teal);
+  border: 1px solid rgba(0,201,177,.2);
+}
+.card-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.55rem; font-weight: 800; color: var(--white);
+  display: flex; align-items: baseline; gap: 5px;
+}
+.card-price span { font-size: 0.78rem; color: var(--muted); font-weight: 400; font-family: 'Inter', sans-serif; }
+.card-actions { display: flex; gap: 8px; margin-top: 8px; }
+.btn-order-card {
+  flex: 1; padding: 10px 0; border-radius: 8px;
+  background: #25D366; color: #fff;
+  font-weight: 600; font-size: 0.83rem; text-align: center;
+  text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn-order-card:hover { box-shadow: 0 4px 16px rgba(37,211,102,.4); transform: translateY(-1px); }
+.btn-enq-card {
+  padding: 10px 13px; border-radius: 8px;
+  background: rgba(0,201,177,.12); color: var(--teal);
+  border: 1px solid var(--border);
+  font-weight: 600; font-size: 0.83rem;
+  text-decoration: none; display: flex; align-items: center; gap: 5px;
+  transition: background .15s;
+}
+.btn-enq-card:hover { background: rgba(0,201,177,.22); }
+
+/* ── DISEASE GUIDE ── */
+.disease-section { background: var(--ocean); }
+.disease-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px; max-width: 960px; margin: 0 auto;
+}
+.disease-card {
+  background: rgba(2,11,24,.6);
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 22px 18px;
+  transition: border-color .2s;
+}
+.disease-card:hover { border-color: rgba(0,201,177,.5); }
+.disease-icon { font-size: 2rem; margin-bottom: 10px; }
+.disease-card h4 { font-family: 'Syne', sans-serif; font-size: 0.97rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.disease-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+.disease-product {
+  margin-top: 10px; font-size: 0.75rem; color: var(--teal);
+  font-weight: 600; display: flex; align-items: center; gap: 4px;
+}
+
+/* ── WHY US ── */
+.why-section { background: var(--deep); }
+.why-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 20px; max-width: 900px; margin: 0 auto;
+}
+.why-card {
+  border: 1px solid var(--border);
+  border-radius: 14px; padding: 26px 20px;
+  text-align: center;
+  background: var(--glass);
+}
+.why-icon { font-size: 2.2rem; margin-bottom: 12px; }
+.why-card h4 { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.why-card p { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+/* ── TESTIMONIALS ── */
+.testi-section { background: var(--ocean); }
+.testi-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px; max-width: 900px; margin: 0 auto;
+}
+.testi-card {
+  background: rgba(2,11,24,.6); border: 1px solid var(--border);
+  border-radius: 14px; padding: 24px;
+}
+.testi-stars { color: var(--amber); font-size: 0.95rem; margin-bottom: 12px; letter-spacing: .05em; }
+.testi-text { color: rgba(240,251,255,.78); font-size: 0.86rem; line-height: 1.65; }
+.testi-author { margin-top: 14px; color: var(--teal); font-size: 0.8rem; font-weight: 600; }
+
+/* ── CONTACT BANNER ── */
+.contact-banner {
+  background: linear-gradient(135deg, #063356 0%, #0A2540 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 60px 24px;
+  text-align: center;
+}
+.contact-banner h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.4rem); font-weight: 800;
+  color: var(--white); letter-spacing: -.02em; margin-bottom: 10px;
+}
+.contact-banner p { color: var(--muted); font-size: 0.95rem; margin-bottom: 28px; }
+.contact-btns { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.cbtn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 13px 26px; border-radius: 10px;
+  font-weight: 700; font-size: 0.9rem;
+  text-decoration: none; transition: transform .15s, box-shadow .15s;
+}
+.cbtn:hover { transform: translateY(-2px); }
+.cbtn-wa { background: #25D366; color: #fff; }
+.cbtn-wa:hover { box-shadow: 0 6px 22px rgba(37,211,102,.4); }
+.cbtn-call { background: var(--amber); color: #1a0a00; }
+.cbtn-call:hover { box-shadow: 0 6px 22px rgba(245,166,35,.4); }
+.cbtn-enq { background: transparent; color: var(--teal); border: 1.5px solid var(--teal); }
+.cbtn-enq:hover { background: rgba(0,201,177,.1); }
+
+/* ── FOOTER ── */
+footer {
+  background: #010810;
+  border-top: 1px solid rgba(0,201,177,.1);
+  text-align: center;
+  padding: 36px 24px 110px;
+  color: var(--muted); font-size: 0.8rem; line-height: 1.85;
+}
+.footer-logo {
+  font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800;
+  color: var(--white); margin-bottom: 8px;
+}
+.footer-logo span { color: var(--teal); }
+
+/* ── STICKY CTA ── */
+.sticky-cta {
+  position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 300;
+  background: rgba(2,11,24,.95);
+  padding: 8px 12px; border-radius: 60px;
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 40px rgba(0,0,0,.5);
+  white-space: nowrap;
+}
+.s-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 9px 16px; border-radius: 50px;
+  font-weight: 700; font-size: 0.78rem;
+  text-decoration: none; transition: transform .15s;
+}
+.s-btn:hover { transform: translateY(-1px); }
+.s-call { background: var(--amber); color: #1a0a00; }
+.s-enq  { background: rgba(0,201,177,.12); color: var(--teal); border: 1px solid var(--border); }
+.s-wa   { background: #25D366; color: #fff; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: 12px 14px; }
+  .nav-logo { font-size: 1.05rem; }
+  .btn-call, .btn-wa { font-size: 0.72rem; padding: 7px 10px; }
+  .hero-stats { gap: 24px; }
+  .sticky-cta { width: calc(100% - 20px); justify-content: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">🦐 Your_company_name</div>
+  <div class="nav-right">
+    <a class="btn-call" href="tel:+917569162287">📞 Call Now</a>
+    <a class="btn-wa" href="tel:+917569162287" target="_blank">💬 WhatsApp</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <canvas id="bubbleCanvas"></canvas>
+  <div class="hero-content">
+    <div class="hero-eyebrow">🦐 Trusted by 300+ Prawn & Fish Farmers in Coastal AP</div>
+    <h1>
+      Healthy Ponds.<br>
+      <span class="accent">Disease-Free</span> Prawns.<br>
+      <span class="accent2">Higher Profits.</span>
+    </h1>
+    <p class="hero-sub">Scientifically formulated aquaculture medicines, probiotics, and pond treatments for prawn, fish, and shrimp farmers across Andhra Pradesh's coastal belt.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20aqua%20products!" target="_blank">🛒 Order on WhatsApp</a>
+      <a class="btn-ghost" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20aqua%20farm%20enquiry." target="_blank">❓ Free Pond Consultation</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">300+</div>
+        <div class="stat-label">Active Farmers</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">15+</div>
+        <div class="stat-label">Product Range</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Coastal Districts</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">48hr</div>
+        <div class="stat-label">Delivery</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div class="trust-strip">
+  <div class="trust-item"><span class="ti">🏛️</span> MPEDA Approved</div>
+  <div class="trust-item"><span class="ti">🔬</span> Lab Certified Doses</div>
+  <div class="trust-item"><span class="ti">🚚</span> Coastal Doorstep Delivery</div>
+  <div class="trust-item"><span class="ti">📞</span> 24hr Farmer Helpline</div>
+  <div class="trust-item"><span class="ti">💊</span> Antibiotic-Free Range</div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="section products-section">
+  <p class="section-eyebrow">Product Range</p>
+  <h2 class="section-title">What's Inside Our Pond Kit</h2>
+  <p class="section-sub">From disease control to water quality — everything your prawn and fish pond needs in one place.</p>
+  <div class="products-grid">
+
+    <!-- 1 -->
+    <div class="product-card">
+      <div class="card-visual">🦠<div class="card-badge badge-hot">Best Seller</div></div>
+      <div class="card-body">
+        <p class="card-tag">Disinfectant</p>
+        <h3>ViraKill BKC 80%</h3>
+        <p class="card-desc">Benzalkonium Chloride-based broad-spectrum disinfectant. Kills bacteria, virus, and fungi in pond water rapidly.</p>
+        <div class="card-targets">
+          <span class="target-tag">White Spot</span>
+          <span class="target-tag">WSSV</span>
+          <span class="target-tag">EMS</span>
+        </div>
+        <div class="card-price">₹580 <span>/ 1L</span></div>
+        <div class="card-actions">
+          <a class="btn-order-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20ViraKill%20BKC%2080%25" target="_blank">🛒 Order</a>
+          <a class="btn-enq-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20enquiry%20about%20ViraKill%20BKC%2080%25" target="_blank">❓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div class="product-card">
+      <div class="card-visual">🌊<div class="card-badge badge-new">New</div></div>
+      <div class="card-body">
+        <p class="card-tag">Probiotic</p>
+        <h3>PondPro Bacillus Plus</h3>
+        <p class="card-desc">Multi-strain probiotic with Bacillus subtilis & Lactobacillus. Improves water quality, reduces ammonia and H₂S levels.</p>
+        <div class="card-targets">
+          <span class="target-tag">Water Quality</span>
+          <span class="target-tag">Ammonia</span>
+          <span class="target-tag">Gut Health</span>
+        </div>
+        <div class="card-price">₹420 <span>/ 500g</span></div>
+        <div class="card-actions">
+          <a class="btn-order-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20PondPro%20Bacillus%20Plus" target="_blank">🛒 Order</a>
+          <a class="btn-enq-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20enquiry%20about%20PondPro%20Bacillus%20Plus" target="_blank">❓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div class="product-card">
+      <div class="card-visual">🦐<div class="card-badge badge-eco">Antibiotic-Free</div></div>
+      <div class="card-body">
+        <p class="card-tag">Feed Supplement</p>
+        <h3>ShrimpVit Immunity Booster</h3>
+        <p class="card-desc">Vitamin C + E complex with herbal extracts. Strengthens shrimp immunity, reduces mortality, and boosts FCR.</p>
+        <div class="card-targets">
+          <span class="target-tag">Immunity</span>
+          <span class="target-tag">Growth</span>
+          <span class="target-tag">Stress</span>
+        </div>
+        <div class="card-price">₹340 <span>/ 500g</span></div>
+        <div class="card-actions">
+          <a class="btn-order-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20ShrimpVit%20Immunity%20Booster" target="_blank">🛒 Order</a>
+          <a class="btn-enq-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20enquiry%20about%20ShrimpVit%20Immunity%20Booster" target="_blank">❓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <!-- 4 -->
+    <div class="product-card">
+      <div class="card-visual">⚗️</div>
+      <div class="card-body">
+        <p class="card-tag">Water Treatment</p>
+        <h3>ClearPond Zeolite Dolomite</h3>
+        <p class="card-desc">Natural mineral blend to stabilise pH, remove ammonia, and increase dissolved oxygen in prawn culture ponds.</p>
+        <div class="card-targets">
+          <span class="target-tag">pH Control</span>
+          <span class="target-tag">Oxygen</span>
+          <span class="target-tag">Clarity</span>
+        </div>
+        <div class="card-price">₹290 <span>/ 25kg bag</span></div>
+        <div class="card-actions">
+          <a class="btn-order-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20ClearPond%20Zeolite%20Dolomite" target="_blank">🛒 Order</a>
+          <a class="btn-enq-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20enquiry%20about%20ClearPond%20Zeolite%20Dolomite" target="_blank">❓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div class="product-card">
+      <div class="card-visual">🐟</div>
+      <div class="card-body">
+        <p class="card-tag">Antiparasitic</p>
+        <h3>ParaKill DDVP 76% EC</h3>
+        <p class="card-desc">Organophosphate-based treatment for fish lice, gill flukes, anchor worms, and ectoparasites in fish ponds.</p>
+        <div class="card-targets">
+          <span class="target-tag">Fish Lice</span>
+          <span class="target-tag">Gill Flukes</span>
+          <span class="target-tag">Worms</span>
+        </div>
+        <div class="card-price">₹490 <span>/ 500ml</span></div>
+        <div class="card-actions">
+          <a class="btn-order-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20ParaKill%20DDVP%2076%25%20EC" target="_blank">🛒 Order</a>
+          <a class="btn-enq-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20enquiry%20about%20ParaKill%20DDVP%2076%25%20EC" target="_blank">❓</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div class="product-card">
+      <div class="card-visual">📦<div class="card-badge badge-deal">Save ₹200</div></div>
+      <div class="card-body">
+        <p class="card-tag">Combo Pack</p>
+        <h3>Pond Starter Mega Kit</h3>
+        <p class="card-desc">ViraKill + PondPro + ShrimpVit + ClearPond. Complete solution from stocking day to harvest for 1 acre pond.</p>
+        <div class="card-targets">
+          <span class="target-tag">1 Acre Pond</span>
+          <span class="target-tag">Full Season</span>
+        </div>
+        <div class="card-price">₹1,430 <span>/ full kit</span></div>
+        <div class="card-actions">
+          <a class="btn-order-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20order%20the%20Pond%20Starter%20Mega%20Kit" target="_blank">🛒 Order</a>
+          <a class="btn-enq-card" href="https://wa.me/917569162287?text=Hi%2C%20I%20have%20an%20enquiry%20about%20the%20Pond%20Starter%20Mega%20Kit" target="_blank">❓</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- DISEASE QUICK GUIDE -->
+<section class="section disease-section">
+  <p class="section-eyebrow">Disease Guide</p>
+  <h2 class="section-title">Spot It. Treat It. Fast.</h2>
+  <p class="section-sub">Common pond diseases and the right product to use — from a farmer's field guide.</p>
+  <div class="disease-grid">
+    <div class="disease-card">
+      <div class="disease-icon">⚪</div>
+      <h4>White Spot Syndrome (WSSV)</h4>
+      <p>Most destructive viral disease in vannamei prawns. White spots on shell, lethargy, mass mortality.</p>
+      <div class="disease-product">✅ Use ViraKill BKC 80%</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-icon">🟢</div>
+      <h4>Green Algae Bloom</h4>
+      <p>Oxygen crash in ponds due to algae overgrowth. Causes early morning mortality and off-flavour in shrimp.</p>
+      <div class="disease-product">✅ Use ClearPond Zeolite</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-icon">💀</div>
+      <h4>Early Mortality Syndrome (EMS)</h4>
+      <p>Bacterial infection causing mass shrimp death within first 35 days. Pale hepatopancreas, abnormal behaviour.</p>
+      <div class="disease-product">✅ Use PondPro + ViraKill</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-icon">🔴</div>
+      <h4>Red Leg Disease</h4>
+      <p>Bacterial hemorrhage causing reddening of legs and swimmerets. Seen in Rohu, Catla, and Tilapia fish.</p>
+      <div class="disease-product">✅ Use ParaKill DDVP</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-icon">🍂</div>
+      <h4>Black Gill Disease</h4>
+      <p>Caused by filamentous bacteria and poor water quality. Darkened gills, reduced feeding, weight loss.</p>
+      <div class="disease-product">✅ Use PondPro Bacillus</div>
+    </div>
+    <div class="disease-card">
+      <div class="disease-icon">💪</div>
+      <h4>Low Immunity / Stress</h4>
+      <p>After transport, temperature change or water quality drop. Shrimp stop feeding, become lethargic.</p>
+      <div class="disease-product">✅ Use ShrimpVit Booster</div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="section why-section">
+  <p class="section-eyebrow">Why AquaShield</p>
+  <h2 class="section-title">Built for Coastal Farmers</h2>
+  <p class="section-sub">We understand the pressure of a 90-day crop cycle. Every product we sell has been tested in AP ponds.</p>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🔬</div>
+      <h4>Scientifically Dosed</h4>
+      <p>Per-acre dosing charts included with every product. No guesswork, no overdose risk.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">📞</div>
+      <h4>24hr Pond Helpline</h4>
+      <p>Disease emergency? WhatsApp us a photo. Our expert responds within the hour.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🚢</div>
+      <h4>Export-Safe Formulas</h4>
+      <p>Products meet EU & US residue limits. Safe for farms selling to export processors.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💰</div>
+      <h4>Wholesale for Bulk</h4>
+      <p>Order 5+ units and get flat 15% off. Extra savings for cooperative farm groups.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testi-section">
+  <p class="section-eyebrow">Farmer Stories</p>
+  <h2 class="section-title">From the Pond to the Market</h2>
+  <p class="section-sub">Real results from real prawn farmers on the AP coast.</p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"ViraKill saved my entire crop last October during the WSSV outbreak. Other farmers lost everything, but I only lost 10% of my pond. Worth every rupee."</p>
+      <p class="testi-author">— Suresh Babu, Vannamei Farmer — Narsapur, WG District</p>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-text">"PondPro Bacillus completely changed my water quality. Ammonia used to spike every 2 weeks. Now it stays stable for 30+ days. My shrimp FCR improved too."</p>
+      <p class="testi-author">— Annapurna Devi, Fish Farmer — Bhimavaram</p>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★☆</div>
+      <p class="testi-text">"Ordered the Mega Kit on WhatsApp, got delivery in 2 days to my village. Price is fair, the dosing chart they gave was very clear. Good people."</p>
+      <p class="testi-author">— Ravi Shankar, Prawn Farmer — Kakinada</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT BANNER -->
+<div class="contact-banner">
+  <h2>Have a Pond Problem? Let's Solve It.</h2>
+  <p>Send us a WhatsApp message with your pond details and we'll suggest the right products — for free.</p>
+  <div class="contact-btns">
+    <a class="cbtn cbtn-wa" href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20place%20an%20order!" target="_blank">🛒 Order on WhatsApp</a>
+    <a class="cbtn cbtn-call" href="tel:+917569162287">📞 +91 75691 62287</a>
+    <a class="cbtn cbtn-enq" href="https://wa.me/917569162287?text=Hi%2C%20I%20need%20a%20free%20pond%20consultation." target="_blank">❓ Free Consultation</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">🦐 Your_company_name</div>
+  <p>Healthy Ponds. Healthy Profits. Healthy Farmers.</p>
+  <p style="margin-top:10px;">📞 <strong style="color:var(--teal)">+917569162287</strong> &nbsp;|&nbsp; 📍 Kakinada, Andhra Pradesh</p>
+  <p style="margin-top:6px;">⏰ Mon – Sat, 8 AM – 8 PM &nbsp;|&nbsp; Emergency helpline: 24hrs</p>
+  <p style="margin-top:18px; font-size:0.7rem; opacity:.35;">© 2026  your_company_name. All rights reserved. | Demo page.</p>
+</footer>
+
+<!-- STICKY CTA -->
+<div class="sticky-cta">
+  <a class="s-btn s-call" href="tel:+917569162287">📞 Call</a>
+  <a class="s-btn s-enq"  href="https://wa.me/917569162287?text=Hi%2C%20I%20need%20a%20pond%20consultation." target="_blank">❓ Enquire</a>
+  <a class="s-btn s-wa"   href="https://wa.me/917569162287?text=Hi%2C%20I%20want%20to%20place%20an%20aqua%20order!" target="_blank">🛒 Order</a>
+</div>
+
+<!-- BUBBLE ANIMATION -->
+<script>
+const canvas = document.getElementById('bubbleCanvas');
+const ctx = canvas.getContext('2d');
+let W, H, bubbles = [];
+
+function resize() {
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+
+class Bubble {
+  constructor(init) {
+    this.reset(init);
+  }
+  reset(init) {
+    this.r = 2 + Math.random() * 6;
+    this.x = Math.random() * W;
+    this.y = init ? Math.random() * H : H + this.r;
+    this.speedY = 0.3 + Math.random() * 0.7;
+    this.wobble = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.012 + Math.random() * 0.018;
+    this.alpha = 0.08 + Math.random() * 0.18;
+  }
+  update() {
+    this.y -= this.speedY;
+    this.wobble += this.wobbleSpeed;
+    this.x += Math.sin(this.wobble) * 0.4;
+    if (this.y < -this.r * 2) this.reset(false);
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.alpha;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.strokeStyle = '#00C9B1';
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    // highlight
+    ctx.globalAlpha = this.alpha * 0.5;
+    ctx.beginPath();
+    ctx.arc(this.x - this.r * 0.28, this.y - this.r * 0.28, this.r * 0.32, 0, Math.PI * 2);
+    ctx.fillStyle = '#7FFFD4';
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function init() {
+  resize();
+  bubbles = Array.from({ length: 55 }, () => new Bubble(true));
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  bubbles.forEach(b => { b.update(); b.draw(); });
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', resize);
+init();
+animate();
+</script>
+</body>
+</html>
